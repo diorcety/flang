@@ -503,13 +503,14 @@ add_flang_library(flang_static
   ${FTN_SUPPORT}
   )
 set_property(TARGET flang_static PROPERTY OUTPUT_NAME flang)
-
+set_property(TARGET flang_static PROPERTY LINKER_LANGUAGE C) 
 set(SHARED_LIBRARY TRUE)
 add_flang_library(flang_shared
   ${FTN_INTRINSICS}
   ${FTN_SUPPORT}
   )
 set_property(TARGET flang_shared PROPERTY OUTPUT_NAME flang)
+set_property(TARGET flang_shared PROPERTY LINKER_LANGUAGE C) 
 target_link_libraries(flang_shared flangrti_shared)
 # Resolve symbols against libm and librt
 if( ${TARGET_OS} STREQUAL "Linux" )
@@ -556,12 +557,12 @@ set_source_files_properties(
   )
 
 # State a dependency on the module
-set_source_files_properties(
-  ieee_arithmetic.F95
-  ieee_exceptions.F95
-  PROPERTIES
-  OBJECT_DEPENDS ${CMAKE_Fortran_MODULE_DIRECTORY}/iso_c_binding.mod
-  )
+#set_source_files_properties(
+#  ieee_arithmetic.F95
+#  ieee_exceptions.F95
+#  PROPERTIES
+#  OBJECT_DEPENDS ${CMAKE_Fortran_MODULE_DIRECTORY}/iso_c_binding.mod
+#  )
 
 
 set_target_properties(flang_static flang_shared
@@ -599,7 +600,7 @@ if( ${TARGET_OS} STREQUAL "Linux" )
     target_compile_options(flang_shared PRIVATE -fPIC)
 endif()
 
-target_compile_options(flang_static PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
+#target_compile_options(flang_static PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
 
-target_compile_options(flang_shared PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
+#target_compile_options(flang_shared PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
 
