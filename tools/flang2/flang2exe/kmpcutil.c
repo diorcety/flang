@@ -38,7 +38,9 @@
 #include "llmputil.h"
 #include "llutil.h"
 #include "cgllvm.h"
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "regutil.h"
 
 #define MXIDLEN 250
@@ -344,6 +346,32 @@ make_kmpc_ident_arg(void)
   return ad_acon(ident, 0);
 }
 
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+#include <stdio.h>
+#include <stdarg.h>
+// FROM https://stackoverflow.com/questions/40159892/using-asprintf-on-windows
+int vasprintf(char **strp, const char *fmt, va_list ap) {
+    // _vscprintf tells you how big the buffer needs to be
+    int len = _vscprintf(fmt, ap);
+    if (len == -1) {
+        return -1;
+    }
+    size_t size = (size_t)len + 1;
+    char *str = malloc(size);
+    if (!str) {
+        return -1;
+    }
+    // _vsprintf_s is the "secure" version of vsprintf
+    int r = vsprintf_s(str, len + 1, fmt, ap);
+    if (r == -1) {
+        free(str);
+        return -1;
+    }
+    *strp = str;
+    return r;
+}
+#endif
+
 /* The return value is allocated and maintained locally, please do not call
  * 'free' on this, bad things will probably happen.
  *
@@ -386,10 +414,11 @@ build_kmpc_api_name(int kmpc_api, va_list va)
 static int
 mk_kmpc_api_call(int kmpc_api, int n_args, int *arg_dtypes, int *arg_ilis, ...)
 {
-  int i, r, ilix, altilix, gargs, fn_sptr, garg_ilis[n_args];
+  int i, r, ilix, altilix, gargs, fn_sptr, *garg_ilis;
   const char *nm;
   const int ret_opc = KMPC_RET_ILIOPC(kmpc_api);
   const int ret_dtype = KMPC_RET_DTYPE(kmpc_api);
+  garg_ilis = (int*)malloc(n_args * sizeof(int));
   va_list va;
 
   /* Some calls will make use of this (see: KMPC_FLAG_STR_FMT) */
@@ -417,6 +446,7 @@ mk_kmpc_api_call(int kmpc_api, int n_args, int *arg_dtypes, int *arg_ilis, ...)
     ILI_ALT(ilix) = altilix;
 
   va_end(va);
+  free(garg_ilis);
   return ilix;
 }
 

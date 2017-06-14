@@ -41,7 +41,9 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 #include <time.h> /* time() */
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h> /* getcwd() */
+#endif
 
 /* See tmpfile(3). */
 FILE *tmpf(char *ignored);

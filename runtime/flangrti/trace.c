@@ -66,7 +66,7 @@ dbg_stop_before_exit(void)
  * 3 - traceback (signal)
  */
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define getpid _getpid
 #endif
 

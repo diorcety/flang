@@ -16,8 +16,11 @@
  */
 
 #include <signal.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/ucontext.h>
 #include <execinfo.h>
+#endif
+
 #include <stdioInterf.h>
 #include "dumpregs.h"
 
@@ -29,6 +32,8 @@ struct cods {
 };
 
 #define CODNULL ((struct cods *)0)
+
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 static struct cods codill[] = {{ILL_ILLOPC, "illegal opcode"},
                                {ILL_ILLOPN, "illegal operand"},
@@ -191,5 +196,13 @@ __abort_sig_init(void)
     n++;
   }
 }
+#else
+void
+__abort_trace(int skip)
+{}
+void
+__abort_sig_init(void)
+{}
+#endif
 
 

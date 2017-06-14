@@ -1073,7 +1073,7 @@ static char *single_outfile_index_name = NULL;
 static char modu_name[MAXIDLEN + 1];
 static int mod_lineno;
 
-#ifdef HOST_WIN
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define long_t long long
 #define LLF "%lld"
 #else

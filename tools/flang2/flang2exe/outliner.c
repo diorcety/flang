@@ -38,7 +38,9 @@
 #include "llmputil.h"
 #include "llutil.h"
 #include "cgllvm.h"
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "regutil.h"
 
 #define MAX_PARFILE_LEN 15
@@ -659,6 +661,26 @@ ll_make_outlined_task(int stblk_sptr, int scope_sptr)
 {
   return make_outlined_func(stblk_sptr, scope_sptr, TRUE);
 }
+
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+#include <stdio.h>
+#include <stdarg.h>
+#include <fcntl.h>  
+#include <sys/types.h>  
+#include <sys/stat.h>  
+#include <io.h>
+int truncate(const char *path, long length) {
+  int f, result = 1;
+  /* This replicates the use of truncate */
+  if (_sopen_s(&f, path, _O_RDWR, _SH_DENYRW, _S_IREAD | _S_IWRITE) == 0)
+  {
+     result = _chsize(f, length);
+     _close(f);
+  }
+  return result;
+}
+
+#endif
 
 int
 ll_reset_parfile(void)
@@ -1453,6 +1475,24 @@ ll_restore_saved_ilmfil()
   if (saved_ilmfil)
     gbl.ilmfil = saved_ilmfil;
 }
+
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+#include <stdio.h>
+#include <stdarg.h>
+#include <fcntl.h>  
+#include <sys/types.h>  
+#include <sys/stat.h>  
+#include <io.h>
+int mkstemp(char *template) {
+  static char *name[256];
+  strcpy_s(name, sizeof(name), template);
+  int rez = _mktemp_s(name, sizeof(name));
+  if (rez == 0) {
+	return _open(name, _O_RDWR | _O_CREAT );
+  }
+  return 0;
+}
+#endif
 
 void
 ll_open_parfiles()

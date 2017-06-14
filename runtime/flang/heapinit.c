@@ -18,6 +18,12 @@
 #include <signal.h>
 #include "stdioInterf.h"
 #include "fioMacros.h"
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
+#define SS SIGBUS
+#else
+#include <windows.h>
+#define SS SIGABRT
+#endif
 
 extern char *__fort_getopt();
 extern long __fort_getoptn();
@@ -30,7 +36,11 @@ static void sighand(s) int s;
 
   lcpu = __fort_myprocnum();
   fprintf(__io_stderr(), "not enough temporary disk space\n");
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   sleep(1); /* wait for message to clear */
+#else
+  Sleep(1000);
+#endif
   __fort_abort(NULL); /* abort */
 }
 
@@ -43,10 +53,10 @@ int val;
   void (*save)();
   int *pi;
 
-  save = signal(SIGBUS, sighand);
+  save = signal(SS, sighand);
   pi = (int *)beg;
   while (pi < (int *)end) {
     *pi++ = val;
   }
-  signal(SIGBUS, save);
+  signal(SS, save);
 }

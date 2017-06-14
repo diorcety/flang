@@ -116,8 +116,10 @@ set(COMMON_DEFS
   PGF90
   )
 
-set_source_files_properties(accpp.c PROPERTIES COMPILE_FLAGS -Wno-comment)
-set_source_files_properties(fpp.c PROPERTIES COMPILE_FLAGS -Wno-comment)
+if(GCC)
+  set_source_files_properties(accpp.c PROPERTIES COMPILE_FLAGS -Wno-comment)
+  set_source_files_properties(fpp.c PROPERTIES COMPILE_FLAGS -Wno-comment)
+endif()
 
 set(INCLUDE_DIRS
   ${FLANG_INCLUDE_DIR}
@@ -169,9 +171,12 @@ target_compile_options(flang1
 target_link_libraries(flang1
   flangArgParser
   scutil
+  )
+if(GCC)
+target_link_libraries(flang1
   -lm
   )
-
+endif()
 # Install flang1 executable
 install(TARGETS flang1
   RUNTIME DESTINATION bin)

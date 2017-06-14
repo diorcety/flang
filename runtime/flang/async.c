@@ -29,7 +29,7 @@
 
 #if !defined(INTERIX86) && !defined(TARGET_INTERIX) && !defined(TARGET_OSX) && !defined(CRAY) && !defined(TARGET_WIN_X8632)
 
-#if !defined(TARGET_WIN_X8664)
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -37,6 +37,7 @@
 #include <aio.h>
 #include <signal.h>
 #else
+#define NONAMELESSUNION
 #include <windows.h>
 #include <errno.h>
 #endif
@@ -54,7 +55,7 @@ struct asy_transaction_data {
   seekoffx_t off;
 };
 
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 struct asy {
   FILE *fp;
   int fd;
@@ -94,7 +95,7 @@ static int slime;
 
 /* internal wait for asynch i/o */
 
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 static int
 asy_wait(struct asy *asy)
 {
@@ -255,7 +256,7 @@ Fio_asy_open(FILE *fp, struct asy **pasy)
 {
   struct asy *asy;
   char *p;
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   HANDLE temp_handle;
 #endif
   asy = (struct asy *)calloc(sizeof(struct asy), 1);
@@ -265,7 +266,7 @@ Fio_asy_open(FILE *fp, struct asy **pasy)
   }
   asy->fp = fp;
   asy->fd = __io_getfd(fp);
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   temp_handle = _get_osfhandle(asy->fd);
   asy->handle =
       ReOpenFile(temp_handle, GENERIC_READ | GENERIC_WRITE,
@@ -289,13 +290,13 @@ Fio_asy_read(struct asy *asy, void *adr, long len)
   int n;
   int tn;
 
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   union Converter converter;
 #endif
   if (slime)
     printf("--Fio_asy_read %d %p %ld\n", asy->fd, adr, len);
 
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   if (asy->flags & ASY_IOACT) { /* i/o active? */
     if (asy_wait(asy) == -1) {  /* ..yes, wait */
       return (-1);
@@ -342,14 +343,14 @@ Fio_asy_write(struct asy *asy, void *adr, long len)
 {
   int n;
   int tn;
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   union Converter converter;
 #endif
 
   if (slime)
     printf("--Fio_asy_write %d %p %ld\n", asy->fd, adr, len);
 
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   if (asy->flags & ASY_IOACT) { /* i/o active? */
     if (asy_wait(asy) == -1) {  /* ..yes, wait */
       return (-1);
@@ -410,7 +411,7 @@ Fio_asy_close(struct asy *asy)
   if (asy->flags & ASY_IOACT) { /* i/o active? */
     n = asy_wait(asy);
   }
-#if defined(TARGET_WIN_X8664)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   /* Close the Re-opened handle that we created. */
   CloseHandle(asy->handle);
 #endif

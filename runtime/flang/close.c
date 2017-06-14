@@ -23,10 +23,12 @@
 
 #include <errno.h>
 #include "global.h"
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "stdioInterf.h"
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define unlink _unlink
 #define access _access
 #endif
@@ -46,7 +48,7 @@ __fortio_close(FIO_FCB *f, int flag)
 
   if (f->nonadvance) {
     f->nonadvance = FALSE;
-#if defined(WINNT)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
     if (__fortio_binary_mode(f->fp))
       __io_fputc('\r', f->fp);
 #endif
@@ -69,7 +71,7 @@ __fortio_close(FIO_FCB *f, int flag)
       else
         __fort_unlink(f->name);
     }
-#ifdef WINNT
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
     else if (f->status == FIO_SCRATCH)
       unlink(f->name);
 #endif

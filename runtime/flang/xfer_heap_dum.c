@@ -18,15 +18,18 @@
 /* this is the dummy version of xfer_heap.c */
 
 #include "fioMacros.h"
-
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 extern char *sbrk(int);
+#endif
 
 /* sbrk */
 
 char *
 __fort_sbrk(int len)
 {
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   return (sbrk(len));
+#endif
 }
 
 /* verify block is in global heap */

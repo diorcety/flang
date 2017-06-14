@@ -16,10 +16,8 @@
  */
 
 /* clang-format off */
-
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 /*	lstat3f.c - Implements 64-bit LIB3F lstat subprogram.  */
-
-#ifndef WINNT
 
 /* must include ent3f.h AFTER io3f.h */
 #include <sys/stat.h>
@@ -50,9 +48,13 @@ int ENT3F(LSTAT64, lstat64)(DCHAR(nm), long long *statb DCLEN(nm))
   statb[8] = b.st_atime;
   statb[9] = b.st_mtime;
   statb[10] = b.st_ctime;
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   statb[11] = b.st_blksize;
   statb[12] = b.st_blocks;
+#else
+  statb[11] = 0;
+  statb[12] = 0;
+#endif
   return i;
 }
-
-#endif /* !WINNT */
+#endif // WINNT

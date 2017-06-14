@@ -83,7 +83,9 @@ __fort_par_open(char *fn, char *par)
       nflags |= O_TRUNC;
     } else if (strncmp(p, "sync", 4) == 0) {
       p += 4;
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
       nflags |= O_SYNC;
+#endif
     }
     while ((*p != '\0') && (*p != ',')) {
       p++;

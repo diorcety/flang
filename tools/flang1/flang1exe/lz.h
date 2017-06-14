@@ -77,7 +77,7 @@ void lzreinit(lzhandle *);
  * lzprintf calls lz */
 void lzprintf(lzhandle *lzh, const char *fmt, ...);
 
-#if defined(HOST_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define vsnprintf _vsnprintf
 #endif
 

@@ -19,7 +19,7 @@
 
 /*	wait3f.c - Implements LIB3F wait subprogram.  */
 
-#ifndef WINNT
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 #include <sys/types.h>
 #include <sys/wait.h>

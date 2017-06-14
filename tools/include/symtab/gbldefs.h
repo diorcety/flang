@@ -37,7 +37,7 @@
 
 typedef unsigned short ILM_T;
 
-#if defined(_WIN32) || defined(HOST_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define DCL_INT8(name) int name : 8
 #define DCL_UINT8(name) FIELD name : 8
 #define DCL_INT16(name) int name : 16

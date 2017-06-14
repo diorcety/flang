@@ -26,7 +26,9 @@
 
 #include <string.h>
 #include <time.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "symtab.h"
 #include "ilm.h"
 #include "fih.h"

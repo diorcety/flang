@@ -28,8 +28,11 @@
 /* declarations needed where integer*8 & logical*8 are supported and
  * the natural integer is integer*4 (__BIGINT is __INT4).
  */
+
+#if !defined(_BASETSD_H_)
 typedef int INT64[2];
 typedef unsigned int UINT64[2];
+#endif
 
 #define I64_MSH(t) t[1]
 #define I64_LSH(t) t[0]

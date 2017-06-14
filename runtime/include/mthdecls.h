@@ -44,6 +44,30 @@ typedef unsigned long _ULONGLONG_T;
 #include <math.h>
 #include <complex.h>
 
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
+#define FLOAT_COMPLEX_TYPE complex float
+#define FLOAT_COMPLEX_CREATE(real, imag) (real + imag * I)
+#define FLOAT_COMPLEX_MUL_CC(a, b) a * b
+#define FLOAT_COMPLEX_ADD_CC(a, b) a + b
+#define FLOAT_COMPLEX_EQ_CC(a, b) a == b
+#define DOUBLE_COMPLEX_TYPE complex double
+#define DOUBLE_COMPLEX_CREATE(real, imag) (real + imag * I)
+#define DOUBLE_COMPLEX_MUL_CC(a, b) a * b
+#define DOUBLE_COMPLEX_ADD_CC(a, b) a + b
+#define DOUBLE_COMPLEX_EQ_CC(a, b) a == b
+#else
+#define FLOAT_COMPLEX_TYPE _Fcomplex
+#define FLOAT_COMPLEX_CREATE(real, imag) _FCbuild(real, imag)
+#define FLOAT_COMPLEX_MUL_CC(a, b) _FCmulcc(a, b)
+#define FLOAT_COMPLEX_ADD_CC(a, b) _FCbuild(crealf(a) + crealf(b), cimagf(a) + cimagf(b))
+#define FLOAT_COMPLEX_EQ_CC(a, b) (crealf(a) == crealf(b) && cimagf(a) == cimagf(b))
+#define DOUBLE_COMPLEX_TYPE _Dcomplex
+#define DOUBLE_COMPLEX_CREATE(real, imag) _Cbuild(real, imag)
+#define DOUBLE_COMPLEX_MUL_CC(a, b) _Cmulcc(a, b)
+#define DOUBLE_COMPLEX_ADD_CC(a, b) _Cbuild(creal(a) + creal(b), cimag(a) + cimag(b))
+#define DOUBLE_COMPLEX_EQ_CC(a, b) (creal(a) == creal(b) && cimag(a) == cimag(b))
+#endif
+
 typedef struct {
   float real;
   float imag;
@@ -175,7 +199,7 @@ typedef struct {
 #define GAMMAF tgammaf
 #define LOG_GAMMAF lgammaf
 
-#if !defined(TARGET_WIN)
+#if 1
 #define CACOSF cacosf
 #define CASINF casinf
 #define CATANF catanf
@@ -193,7 +217,7 @@ typedef struct {
 #define CTANF ctan
 #endif
 
-#if defined(TARGET_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define BESSEL_J0F _j0
 #define BESSEL_J1F _j1
 #define BESSEL_JNF _jn

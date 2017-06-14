@@ -22,7 +22,7 @@
 
 /* assumes the Unix times system call */
 
-#if   defined(WINNT)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 
 #include <time.h>
 

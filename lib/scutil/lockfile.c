@@ -43,12 +43,15 @@
  *	Clean up by deleting the uniquely named file we had created earlier.
  */
 
-#include <unistd.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <fcntl.h>
-#include <stdio.h>
+#include <unistd.h>
+#else
+typedef int pid_t;
+#endif
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lockfile.h"

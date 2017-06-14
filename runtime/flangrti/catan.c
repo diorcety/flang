@@ -23,7 +23,7 @@
 void
 __mth_i_catan(cmplx_t *cmplx, float real, float imag)
 {
-  complex float f = real + imag * I;
+  FLOAT_COMPLEX_TYPE f = FLOAT_COMPLEX_CREATE(real, imag);
   f = CATANF(f);
   *cmplx = *((cmplx_t *)&f);
 }

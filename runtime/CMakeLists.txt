@@ -18,14 +18,21 @@ add_definitions(
  -DMAXCPUS=256 
  -DMAXCPUSL=8 
  -DMAXCPUSR=8 
- -DTARGET_LINUX 
- -DLINUX 
  -DPGF90 
  -DPGFLANG
  -DNATIVE_FPCVT
  -DPGI_LITTLE_ENDIAN
 )
 
+if( ${TARGET_OS} STREQUAL "Linux" )
+add_definitions(
+ -DTARGET_LINUX
+ -DLINUX
+)
+elseif( ${TARGET_OS} STREQUAL "Win32" )
+endif()
+
+if( ${TARGET_OS} STREQUAL "Linux" )
 if( ${TARGET_ARCHITECTURE} STREQUAL "x86_64" )
   add_definitions(-DTARGET_X8664)
 elseif( ${TARGET_ARCHITECTURE} STREQUAL "aarch64" )
@@ -38,6 +45,7 @@ elseif( ${TARGET_ARCHITECTURE} STREQUAL "ppc64le" )
     -DTARGET_LINUX_POWER
     -DLINUX_POWER
   )
+endif()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)

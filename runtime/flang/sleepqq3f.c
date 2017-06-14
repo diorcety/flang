@@ -19,10 +19,12 @@
 
 /*	sleep3f.c - Implements DFPORT SLEEPQQ subprogram.  */
 
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "ent3f.h"
 
-#if defined(WIN64) || defined(WIN32)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 
 #include <windows.h>
 

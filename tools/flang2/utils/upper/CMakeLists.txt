@@ -22,9 +22,15 @@ add_executable(upperl
 
 # Generate upper tables
 
+if(MSVC)
+set(EGREP "findstr /R /v /C:")
+else()
+set(EGREP "grep -v ")
+endif()
+
 add_custom_command( 
   OUTPUT ${UTILS_UPPER_BIN_DIR}/upperilm.h
-  COMMAND LC_ALL=C sort ${UTILS_UPPER_DIR}/upperilm.in | grep -v "^ *\#" > ${UTILS_UPPER_BIN_DIR}/upperilm.sort
+  COMMAND ${CMAKE_COMMAND} -E env LC_ALL=C sort ${UTILS_UPPER_DIR}/upperilm.in | ${EGREP}"^ *\#" > ${UTILS_UPPER_BIN_DIR}/upperilm.sort
   COMMAND ${CMAKE_BINARY_DIR}/bin/upperl ${UTILS_UPPER_BIN_DIR}/upperilm.sort ${UTILS_UPPER_BIN_DIR}/upperilm.h
   DEPENDS upperl ${UTILS_UPPER_DIR}/upperilm.in
   )

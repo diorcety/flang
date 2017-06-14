@@ -17,6 +17,13 @@
 
 #include "mthdecls.h"
 
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+static void sincosf(float angle, float *psin, float *pcos)
+{
+    *psin = sinf(angle);
+    *pcos = cosf(angle);
+}
+#endif
 void
 __mth_i_cexp(cmplx_t *cmplx, float real, float imag)
 {

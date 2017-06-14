@@ -38,7 +38,7 @@ static int currpos; /* current position within lbuff */
 
 FILE *infile[10], *outfile[10], *savefile[10];
 static FILE *null_file;
-#ifdef HOST_WIN
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define NULL_FNAME "nul"
 #else
 #define NULL_FNAME "/dev/null"

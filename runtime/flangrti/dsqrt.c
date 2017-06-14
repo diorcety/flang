@@ -18,5 +18,9 @@
 double
 __mth_i_dsqrt(double d)
 {
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   return __builtin_sqrt(d);
+#else
+  return sqrt(d);
+#endif
 }

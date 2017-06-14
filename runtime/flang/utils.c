@@ -581,7 +581,12 @@ static int
 __fortio_trunc(FIO_FCB *p, seekoffx_t length)
 {
   __io_fflush(p->fp);
+  
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   if (ftruncate(__fort_getfd(p->fp), length))
+#else
+  if (_chsize_s(__fort_getfd(p->fp), length))
+#endif
     return __fortio_error(__io_errno());
   if (length == 0) {
     /*

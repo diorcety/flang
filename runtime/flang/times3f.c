@@ -19,7 +19,7 @@
 
 /*	times3f.c - Implements LIB3F times subprogram.  */
 
-#ifndef WINNT
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 #include <sys/times.h>
 #include "io3f.h"

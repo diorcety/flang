@@ -25,8 +25,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <memory.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/time.h>
-
+#endif
 #include "global.h"
 /* FIXME: HACK
  * include/pgstdio.h:#define __fort_getenv(name) __io_getenv(name)

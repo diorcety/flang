@@ -70,7 +70,7 @@ int I8(__fort_fetch_int)(void *b, F90_Desc *d)
       __fort_abort("fetch_int: non-scalar destination");
     if (F90_FLAGS_G(d) & __OFF_TEMPLATE)
       __fort_abort("fetch_int: non-local value");
-    b += DIST_SCOFF_G(d) * F90_LEN_G(d);
+    b = (void*)(((char*) b) + DIST_SCOFF_G(d) * F90_LEN_G(d));
     kind = F90_KIND_G(d);
   } else
     kind = Abs(F90_TAG_G(d));
@@ -101,7 +101,7 @@ void I8(__fort_store_int)(void *b, F90_Desc *d, int val)
       __fort_abort("store_int: non-scalar destination");
     if (F90_FLAGS_G(d) & __OFF_TEMPLATE)
       return;
-    b += DIST_SCOFF_G(d) * F90_LEN_G(d);
+    b = (void*)(((char*) b) + DIST_SCOFF_G(d) * F90_LEN_G(d));
     kind = F90_KIND_G(d);
   } else
     kind = Abs(F90_TAG_G(d));
@@ -136,7 +136,7 @@ int I8(__fort_fetch_log)(void *b, F90_Desc *d)
       __fort_abort("fetch_log: non-scalar destination");
     if (F90_FLAGS_G(d) & __OFF_TEMPLATE)
       __fort_abort("fetch_int: non-local value");
-    b += DIST_SCOFF_G(d) * F90_LEN_G(d);
+    b = (void*)(((char*) b) + DIST_SCOFF_G(d) * F90_LEN_G(d));
     kind = F90_KIND_G(d);
   } else
     kind = Abs(F90_TAG_G(d));
@@ -167,7 +167,7 @@ void I8(__fort_store_log)(void *b, F90_Desc *d, int val)
       __fort_abort("store_log: non-scalar destination");
     if (F90_FLAGS_G(d) & __OFF_TEMPLATE)
       return;
-    b += DIST_SCOFF_G(d) * F90_LEN_G(d);
+    b = (void*)(((char*) b) + DIST_SCOFF_G(d) * F90_LEN_G(d));
     kind = F90_KIND_G(d);
   } else
     kind = Abs(F90_TAG_G(d));

@@ -142,9 +142,12 @@ target_compile_options(flang2
 target_link_libraries(flang2
   flangArgParser
   scutil
+  )
+if(GCC)
+target_link_libraries(flang2
   -lm
   )
-
+endif()
 add_dependencies(flang2
   gen_backend_error_headers # Error message headers
   gen_backend_symtab        # Symbol table headers

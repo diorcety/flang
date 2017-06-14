@@ -18,5 +18,9 @@
 float
 __mth_i_sqrt(float f)
 {
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   return __builtin_sqrtf(f);
+#else
+  return sqrtf(f);
+#endif
 }

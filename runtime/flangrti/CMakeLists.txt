@@ -21,20 +21,20 @@ SET(CMAKE_ASM_FLAGS "${CFLAGS} ${ASM_OPTIONS}" )
 
 if( ${TARGET_ARCHITECTURE} STREQUAL "x86_64" )
   set(ARCH_DEP_FILES 
-    x86_64-Linux/flt_env.c
-    x86_64-Linux/x86_daz.c
-    x86_64-Linux/x86_flushz.c
-    x86_64-Linux/dumpregs.c
+    x86_64-${TARGET_OS}/flt_env.c
+    x86_64-${TARGET_OS}/x86_daz.c
+    x86_64-${TARGET_OS}/x86_flushz.c
+    x86_64-${TARGET_OS}/dumpregs.c
   )
 elseif( ${TARGET_ARCHITECTURE} STREQUAL "aarch64" )
   set(ARCH_DEP_FILES
-      aarch64-Linux/flt_env.c
-      aarch64-Linux/dumpregs.c
+      aarch64-${TARGET_OS}/flt_env.c
+      aarch64-${TARGET_OS}/dumpregs.c
   )
 elseif( ${TARGET_ARCHITECTURE} STREQUAL "ppc64le" )
   set(ARCH_DEP_FILES
-    ppc64le-Linux/flt_env.c
-    ppc64le-Linux/dumpregs.c
+    ppc64le-${TARGET_OS}/flt_env.c
+    ppc64le-${TARGET_OS}/dumpregs.c
   )
 endif()
 
@@ -189,12 +189,13 @@ add_flang_library(flangrti_shared
   )
 
 # Resolve symbols against libm
-target_link_libraries(flangrti_shared m)
-
+if( ${TARGET_OS} STREQUAL "Linux" )
+  target_link_libraries(flangrti_shared m)
+endif()
 # Import OpenMP
 if (NOT DEFINED LIBOMP_EXPORT_DIR)
   find_library(FLANG_LIBOMP libomp)
-  target_link_libraries(flangrti_shared ${FLANG_LIBOMP})
+  target_link_libraries(flangrti_shared PUBLIC ${FLANG_LIBOMP})
 endif()
 
 if( ${TARGET_ARCHITECTURE} STREQUAL "aarch64" )
@@ -221,9 +222,12 @@ target_include_directories(flangrti_shared
 set_target_properties(flangrti_shared flangrti_static
                       PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${FLANG_RTE_LIB_DIR})
 
-target_compile_options(flangrti_static PRIVATE -fPIC)
 
-target_compile_options(flangrti_shared PRIVATE -fPIC)
+if( ${TARGET_OS} STREQUAL "Linux" )
+    target_compile_options(flangrti_static PRIVATE -fPIC)
+
+    target_compile_options(flangrti_shared PRIVATE -fPIC)
+endif()
 
 target_compile_options(flangrti_static PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
 

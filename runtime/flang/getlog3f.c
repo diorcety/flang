@@ -19,7 +19,7 @@
 
 /*	getlog3f.c - Implements LIB3F getlog subprogram.  */
 
-#ifndef WINNT
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 #include "ent3f.h"
 #include "utils3f.h"

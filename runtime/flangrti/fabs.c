@@ -21,6 +21,10 @@
 double
 __mth_i_fabs(double arg)
 {
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   double d = __builtin_fabs(arg);
   return d;
+#else
+  return fabs(arg);
+#endif
 }

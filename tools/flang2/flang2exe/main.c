@@ -37,7 +37,7 @@
 #include "llassem.h"
 #include "cgllvm.h"
 #include "outliner.h"
-#if !defined(TARGET_WIN)
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
 #endif
 #include <time.h>

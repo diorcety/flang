@@ -31,11 +31,12 @@ set_property(
   KANJI
  )
 
+if(GCC)
 set_property(
   SOURCE flangmain.c PROPERTY
   COMPILE_FLAGS -Wno-implicit-function-declaration
   )
-
+endif()
 set_target_properties(flangmain
   PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY ${FLANG_RTE_LIB_DIR}

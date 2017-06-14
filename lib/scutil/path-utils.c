@@ -23,7 +23,9 @@
 #include "legacy-util-api.h"
 #include <stddef.h>
 #include <string.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h> /* access() */
+#endif //_WIN32
 
 void
 basenam(const char *orig_path, const char *optional_suffix, char *basename)

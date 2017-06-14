@@ -39,7 +39,9 @@
  *  Build-time sanity checks
  */
 #if __STDC_VERSION__+0 < 199901
-# warning C99 compiler required but __STDC_VERSION__ is less than 199901
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
+# warning C99 compiler required but __STDC_VERSION__ is less than 
+#endif
 #endif
 #if FLT_RADIX+0 != 2
 # error FLT_RADIX != 2

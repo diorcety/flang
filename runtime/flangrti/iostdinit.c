@@ -16,8 +16,8 @@
  */
 
 #include <stdio.h>
-#if !defined(WINNT) && !defined(ST100)
 #include <sys/stat.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW) && !defined(ST100)
 #include <unistd.h>
 #endif
 #include <time.h>
@@ -25,7 +25,7 @@
 
 /* get environ */
 
-#if defined(WIN32) || defined(WIN64)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 /*
  * enclose _fileno within parens to ensure calling the function rather than
  * the _fileno function macro (if/when it exists).
@@ -33,9 +33,9 @@
 #define fileno(x) (_fileno)(x)
 #endif
 
-#if   defined(WINNT)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #include <stdlib.h>
-extern char **environ;
+extern char **_environ;
 #elif defined(TARGET_OSX)
 #include <crt_externs.h>
 #else
@@ -45,7 +45,9 @@ extern char **environ;
 char **
 __io_environ()
 {
-#if   !defined(TARGET_OSX)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+  return (_environ);
+#elif   !defined(TARGET_OSX)
   return (environ);
 #else
   return (*_NSGetEnviron());
@@ -90,7 +92,7 @@ __io_stderr(void)
 
 /* convert macros to routines */
 
-#if defined(TARGET_WIN) || defined(WIN32)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #include <stdio.h>
 int
 __io_fgetc(FILE *p)
@@ -160,7 +162,7 @@ __io_ferror(void *p)
 int
 __io_getfd(void *fp)
 {
-  return (((FILE *)fp)->_fileno);
+  return (_fileno((FILE *)fp));
 }
 
 /* is a tty? */
@@ -179,7 +181,7 @@ __io_binary_mode(void *fp)
 #if defined(WINNT)
 #include <fcntl.h>
 
-#if defined(WIN64) || defined(WIN32)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define O_BINARY _O_BINARY
 #endif
 
@@ -206,7 +208,7 @@ __io_setmode_binary(void *fp)
 #if defined(WINNT)
 #include <fcntl.h>
 
-#if defined(WIN64) || defined(WIN32)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define O_BINARY _O_BINARY
 #endif
 
@@ -221,7 +223,7 @@ __io_setmode_binary(void *fp)
 int
 __io_ispipe(void *f)
 {
-#if !defined(WINNT) && !defined(ST100)
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW) && !defined(ST100)
   struct stat st;
 
   fstat(fileno((FILE *)f), &st);
@@ -261,7 +263,7 @@ __io_fwrite(char *ptr, size_t size, size_t nitems, FILE *stream)
 #endif
 }
 
-#if defined(WINNT) || defined(WIN64) || defined(WIN32)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 
 #if   defined(PGI_CRTDLL)
 extern long *_imp___timezone_dll; /* for crtdll.dll */
@@ -279,18 +281,22 @@ __io_timezone(void *tm)
 {
 #if defined(SUN4) || defined(PPC) || defined(OSX86)
   return ((struct tm *)tm)->tm_gmtoff;
-#elif defined(WINNT) || defined(WIN64) || defined(WIN32)
+#elif defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
   return (0);
 #else
   return -(timezone - (((struct tm *)tm)->tm_isdst ? 3600 : 0));
 #endif
 }
 
-#if  (defined(WIN32) || defined(WIN64))
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 /* OT 10 */
 void * 
 _pgi_get_iob(int xx) {
+#if _MSC_VER < 1900
 	 return & __iob_func()[xx];
+#else
+	 return __acrt_iob_func(xx);
+#endif
 }
 
 #endif

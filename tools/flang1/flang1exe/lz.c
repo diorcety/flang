@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include "gbldefs.h"
-#if !defined(HOST_WIN)
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
 #include <sys/types.h>
 #endif
@@ -182,7 +182,7 @@ lzrestore(lzhandle *lzh)
 {
   int l;
   fseek(lzh->file, lzh->savefile, SEEK_SET);
-#if !defined(HOST_WIN)
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
   if (lzh->inout) {
     ftruncate(fileno(lzh->file), lzh->savefile);
   }

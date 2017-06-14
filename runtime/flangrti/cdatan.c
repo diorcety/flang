@@ -23,7 +23,7 @@
 void
 __mth_i_cdatan(dcmplx_t *dcmplx, double real, double imag)
 {
-  complex double d = real + imag * I;
+  DOUBLE_COMPLEX_TYPE d = DOUBLE_COMPLEX_CREATE(real, imag);
   d = catan(d);
   *dcmplx = *((dcmplx_t *)&d);
 }

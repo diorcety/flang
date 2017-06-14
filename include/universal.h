@@ -42,9 +42,13 @@
 #if __linux__ || __APPLE__ || __STDC_VERSION__ >= 199901L && !__PGI_TOOLS10
 #include <stdbool.h>
 #else
+#if _MSC_VER < 1900
 typedef char bool;
 #define true 1
 #define false 0
+#else
+#include <stdbool.h>
+#endif
 #endif
 
 #ifndef INLINE

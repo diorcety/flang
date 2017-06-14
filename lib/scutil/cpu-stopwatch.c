@@ -21,8 +21,30 @@
  *  since the most recent call.  Very much not thread-safe.
  */
 
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/times.h>
 #include <unistd.h>
+#else
+#include <sys/timeb.h>
+#include <sys/types.h>
+#include <time.h>
+struct tms
+  {
+    clock_t tms_utime;          /* User CPU time.  */
+    clock_t tms_stime;          /* System CPU time.  */
+ 
+    clock_t tms_cutime;         /* User CPU time of dead children.  */
+    clock_t tms_cstime;         /* System CPU time of dead children.  */
+  };
+clock_t times (struct tms *__buffer) {
+ 
+	__buffer->tms_utime = clock();
+	__buffer->tms_stime = 0;
+	__buffer->tms_cstime = 0;
+	__buffer->tms_cutime = 0;
+	return __buffer->tms_utime;
+}
+#endif
 #include "scutil.h"
 
 unsigned long

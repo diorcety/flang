@@ -19,7 +19,9 @@
 
 #include <stdio.h>  /* TODO: try moving to  pgstdio.h */
 #include <string.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include <stdlib.h>
 
 /* defines to use real host stdio routines */
@@ -82,6 +84,7 @@ typedef long seekoffx_t;
 #define __fort_getenv(name) getenv(name)
 #define __io_abort() exit(1)
 #define __fortio_ispipe(fp) __io_ispipe(fp)
+#define __fortio_binary_mode(fd) __io_binary_mode(fd)
 
 /* finally the prototypes */
 

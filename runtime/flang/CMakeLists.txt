@@ -512,7 +512,11 @@ add_flang_library(flang_shared
 set_property(TARGET flang_shared PROPERTY OUTPUT_NAME flang)
 target_link_libraries(flang_shared flangrti_shared)
 # Resolve symbols against libm and librt
-target_link_libraries(flang_shared m rt)
+if( ${TARGET_OS} STREQUAL "Linux" )
+  target_link_libraries(flang_shared m rt)
+elseif( ${TARGET_OS} STREQUAL "Win32") 
+  target_link_libraries(flang_shared Ws2_32)
+endif()
 
 set(SHARED_LIBRARY FALSE)
 
@@ -589,9 +593,11 @@ add_dependencies(flang_shared
   flang2
   )
 
-target_compile_options(flang_static PRIVATE -fPIC)
+if( ${TARGET_OS} STREQUAL "Linux" )
+    target_compile_options(flang_static PRIVATE -fPIC)
 
-target_compile_options(flang_shared PRIVATE -fPIC)
+    target_compile_options(flang_shared PRIVATE -fPIC)
+endif()
 
 target_compile_options(flang_static PUBLIC $<$<COMPILE_LANGUAGE:Fortran>:-Mreentrant>)
 

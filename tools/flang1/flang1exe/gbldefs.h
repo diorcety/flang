@@ -272,7 +272,7 @@ void parse_init(void);
 
 void fpp(void); /* fpp.c */
 
-#if defined(HOST_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #define snprintf _snprintf
 #endif
 

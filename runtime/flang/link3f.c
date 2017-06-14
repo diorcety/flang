@@ -19,7 +19,7 @@
 
 /*	link3f.c - Implements LIB3F link subprogram.  */
 
-#ifndef WINNT
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 /* must include ent3f.h AFTER io3f.h */
 #include "io3f.h"

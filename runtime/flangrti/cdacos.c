@@ -23,7 +23,7 @@
 void
 __mth_i_cdacos(dcmplx_t *dcmplx, double real, double imag)
 {
-  complex double d = real + imag * I;
+  DOUBLE_COMPLEX_TYPE d = DOUBLE_COMPLEX_CREATE(real, imag);
   d = cacos(d);
   *dcmplx = *((dcmplx_t *)&d);
 }

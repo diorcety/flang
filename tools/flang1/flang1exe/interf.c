@@ -826,7 +826,7 @@ get_module_file_name_from_user(TOBE_IMPORTED_LIST *il, char *from_file_name)
   for (chfrom = from_file_name; *chfrom; ++chfrom) {
     if (*chfrom == '/')
       slash = chfrom;
-#ifdef HOST_WIN
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
     if (*chfrom == '\\')
       slash = chfrom;
 #endif

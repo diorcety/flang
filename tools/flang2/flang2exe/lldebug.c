@@ -38,6 +38,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
+#ifndef PATH_MAX
+#define PATH_MAX 260 // SHOULD INCLUDE WINDOWS.h
+#endif
+#endif
+
 #if !defined(DECLLINEG)
 #define DECLLINEG(sptr) 0
 #endif

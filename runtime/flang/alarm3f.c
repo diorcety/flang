@@ -19,7 +19,7 @@
 
 /*	alarm3f.c - Implements LIB3F alarm subprogram.  */
 
-#ifndef WINNT
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <signal.h>
 #include "ent3f.h"
 

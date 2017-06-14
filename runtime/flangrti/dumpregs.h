@@ -20,7 +20,7 @@
  *  \file
  *  Declare routines that access the machine registers
  */
-
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 void dumpregs(gregset_t *regs);
 gregset_t *getRegs(ucontext_t *u);
-
+#endif

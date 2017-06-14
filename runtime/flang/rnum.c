@@ -6300,7 +6300,7 @@ put_int(void *b, F90_Desc *d, __INT_T val)
       __fort_abort("put_int: non-scalar destination");
     if (F90_FLAGS_G(d) & __OFF_TEMPLATE)
       return;
-    b += DIST_SCOFF_G(d) * F90_LEN_G(d);
+    b = (void*)(((char*) b) + DIST_SCOFF_G(d) * F90_LEN_G(d));
     kind = F90_KIND_G(d);
   } else
     kind = Abs(F90_TAG_G(d));

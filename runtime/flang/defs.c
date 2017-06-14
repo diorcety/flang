@@ -28,13 +28,21 @@
 __INT_T f90DummyGenBlock = 0;
 __INT_T *f90DummyGenBlockPtr = &f90DummyGenBlock;
 
+#if defined(_MSC_VER)
+#define ALIGNED_(x) __declspec(align(x))
+#else
+#if defined(__GNUC__)
+#define ALIGNED_(x) __attribute__ ((aligned(x)))
+#endif
+#endif
+
 /* dbug.c */
 /*
  * explicitly initialize for OSX since the object of this file will not be
  * linked in from the library.  The link will not see the .comm for
  * __fort_test (i.e., its definition!).
  */
-__fort_vars_t   __fort_vars __attribute__((aligned(128))) = {
+__fort_vars_t   ALIGNED_(128) __fort_vars = {
     .debug      = 0,
     .zmem       = 0,
     .debugn     = 0,

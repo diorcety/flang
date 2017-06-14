@@ -15,7 +15,9 @@
  *
  */
 
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/signal.h>
+#endif
 #include "stdioInterf.h"
 #include "fioMacros.h"
 
@@ -33,6 +35,7 @@ struct sigs {
 };
 
 static struct sigs sigs[] = {
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
     {SIGHUP, "hangup"},
     {SIGINT, "interrupt"},
     {SIGQUIT, "quit"},
@@ -64,6 +67,7 @@ static struct sigs sigs[] = {
 /*	{SIGLOST,"resource lost (eg, record-lock lost)"}, */
 /*	{SIGUSR1,"user defined signal 1"}, */
 /*	{SIGUSR2,"user defined signal 2"}, */
+#endif
     {0, NULL} /* end of list */
 };
 

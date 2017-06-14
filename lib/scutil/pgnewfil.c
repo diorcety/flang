@@ -34,7 +34,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#if defined(HOST_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
 #include <direct.h>
 #include <io.h>
 extern unsigned long getpid(void);
@@ -313,7 +313,7 @@ pg_makenewfile(char *pfx, char *sfx, int make)
       if (!make) {
         break;
       } else {
-#if defined(HOST_WIN)
+#if defined(HOST_WIN) || defined(WINNT) || defined(WIN64) || defined(WIN32) || defined(HOST_MINGW)
         fd = _open(filename, _O_CREAT | _O_BINARY | _O_EXCL | _O_RDWR, _S_IWRITE);
 #else
         fd = open(filename, O_CREAT | O_EXCL | O_RDWR, S_IRUSR | S_IWUSR);

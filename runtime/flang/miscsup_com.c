@@ -25,8 +25,12 @@
 
 #include <time.h>
 #include <string.h>
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/time.h>
 #include <unistd.h>
+#else
+#include <winsock2.h>
+#endif
 #include "stdioInterf.h"
 #include "fioMacros.h"
 #include "llcrit.h"

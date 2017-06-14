@@ -18,8 +18,11 @@
 /* clang-format off */
 
 /*	getpid3f.c - Implements LIB3F getpid subprogram.  */
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 
 #include "ent3f.h"
 #include <unistd.h>
 
 int ENT3F(GETPID, getpid)() { return getpid(); }
+
+#endif /* !WINNT */

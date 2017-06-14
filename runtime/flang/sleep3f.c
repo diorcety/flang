@@ -19,7 +19,9 @@
 
 /*	sleep3f.c - Implements LIB3F sleep subprogram.  */
 
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <unistd.h>
+#endif
 #include "ent3f.h"
 
 #if defined(WIN64) || defined(WIN32)

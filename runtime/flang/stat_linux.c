@@ -18,7 +18,7 @@
 /** \file
  * \brief Fill in statistics structure (Linux version)
  */
-
+#if !defined(HOST_WIN) && !defined(WINNT) && !defined(WIN64) && !defined(WIN32) && !defined(HOST_MINGW)
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/utsname.h>
@@ -126,3 +126,48 @@ __fort_set_second(double d)
 {
   first = d;
 }
+#else
+	
+#include <windows.h>
+void
+__fort_setarg(void)
+{
+}
+
+static double first = 0.0;
+
+double
+__fort_second()
+{
+  double d;
+  FILETIME ft;
+  ULARGE_INTEGER ul;
+  GetSystemTimeAsFileTime(&ft);
+  // Fill ULARGE_INTEGER low and high parts.
+  ul.LowPart = ft.dwLowDateTime;
+  ul.HighPart = ft.dwHighDateTime;
+  // Convert to microseconds.
+  ul.QuadPart /= 10ULL;
+  // Remove Windows to UNIX Epoch delta.
+  ul.QuadPart -= 11644473600000000ULL;
+  // Modulo to retrieve the microseconds.
+  d = (double)ul.QuadPart / 1000000;
+  if (first == 0.0) {
+    first = d;
+  }
+  return (d - first);
+}
+
+void
+__fort_set_second(double d)
+{
+  first = d;
+}
+
+void __fort_gettb(t) struct tb *t;
+{
+}
+
+#endif
+
+
