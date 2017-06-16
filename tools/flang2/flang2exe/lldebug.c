@@ -1193,7 +1193,7 @@ get_filename(int findex)
   if (dirname == NULL) {
     filename_length = strlen((filename == NULL) ? "" : filename);
     NEW(fullpath, char, filename_length + 1);
-    return double_backslash(filename);
+    return double_backslash(fullpath);
   }
   filename_length = strlen((filename == NULL) ? "" : filename);
   dirname_length = strlen(dirname);
