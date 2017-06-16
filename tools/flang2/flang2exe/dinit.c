@@ -307,6 +307,7 @@ dinit_varref(VAR *ivl, int member, CONST *ict, int dtype,
       goto error_exit;
     num_elem = 1;
     offset = 0;
+	elsize = 1; /* TODO CHECK !!!!! */
     if (!POINTERG(sptr) && DTY(DTYPEG(sptr)) == TY_ARRAY) {
       /* A whole array so determine number of elements to init */
       if (extent_of(DTYPEG(sptr)))

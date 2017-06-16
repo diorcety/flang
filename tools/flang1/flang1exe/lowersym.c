@@ -5251,7 +5251,7 @@ llvm_check_retval_inargs(int sptr)
   if (FVALG(sptr)) {
     int dtype;
     int ent_dtype = DTYPEG(sptr);
-    llvm_fix_args(sptr, dtype != DT_NONE);
+    llvm_fix_args(sptr, ent_dtype != DT_NONE);
     dtype = DTYPEG(FVALG(sptr));
     fix_class_args(sptr);
     switch (DTY(dtype)) {
